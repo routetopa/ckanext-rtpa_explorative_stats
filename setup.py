@@ -23,8 +23,8 @@ setup(
     url='https://github.com//ckanext-rtpa_explorative_stats',
 
     # Author details
-    author='''''',
-    author_email='''''',
+    author='''Maciej Janowski''',
+    author_email='''maciej.janowski@insight-centre.org''',
 
     # Choose your license
     license='AGPL',
@@ -48,7 +48,7 @@ setup(
 
 
     # What does your project relate to?
-    keywords='''CKAN''',
+    keywords='''CKAN explorative stats''',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().

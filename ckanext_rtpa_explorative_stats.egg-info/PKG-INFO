@@ -3,8 +3,8 @@ Name: ckanext-rtpa-explorative-stats
 Version: 0.0.1
 Summary: Explorative Stats extension
 Home-page: https://github.com//ckanext-rtpa_explorative_stats
-Author: UNKNOWN
-Author-email: UNKNOWN
+Author: Maciej Janowski
+Author-email: maciej.janowski@insight-centre.org
 License: AGPL
 Description: .. You should enable this project on travis-ci.org and coveralls.io to make
            these badges work. The necessary Travis and Coverage config files have been
@@ -173,7 +173,7 @@ Description: .. You should enable this project on travis-ci.org and coveralls.io
                git tag 0.0.2
                git push --tags
         
-Keywords: CKAN
+Keywords: CKAN explorative stats
 Platform: UNKNOWN
 Classifier: Development Status :: 4 - Beta
 Classifier: License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)
