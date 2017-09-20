@@ -1,0 +1,17 @@
+LICENSE
+MANIFEST.in
+README.rst
+requirements.txt
+setup.cfg
+setup.py
+ckanext/__init__.py
+ckanext/rtpaexplorativestats/__init__.py
+ckanext/rtpaexplorativestats/plugin.py
+ckanext/rtpaexplorativestats/tests/__init__.py
+ckanext/rtpaexplorativestats/tests/test_plugin.py
+ckanext_rtpaexplorativestats.egg-info/PKG-INFO
+ckanext_rtpaexplorativestats.egg-info/SOURCES.txt
+ckanext_rtpaexplorativestats.egg-info/dependency_links.txt
+ckanext_rtpaexplorativestats.egg-info/entry_points.txt
+ckanext_rtpaexplorativestats.egg-info/namespace_packages.txt
+ckanext_rtpaexplorativestats.egg-info/top_level.txt
