@@ -7,6 +7,7 @@ setup.py
 ckanext/__init__.py
 ckanext/rtpaexplorativestats/__init__.py
 ckanext/rtpaexplorativestats/plugin.py
+ckanext/rtpaexplorativestats/templates/rtpaexplorativestats-view.html
 ckanext/rtpaexplorativestats/tests/__init__.py
 ckanext/rtpaexplorativestats/tests/test_plugin.py
 ckanext_rtpaexplorativestats.egg-info/PKG-INFO
