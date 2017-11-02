@@ -40,27 +40,34 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 		except:
 			Done=True
 		NumericColumns=(Dataframe.select_dtypes(exclude=['object','datetime']).columns)
+		CheckNumericColumns=[]
+		CheckNumericColumns=(NumericColumns.tolist())
+		if not CheckNumericColumns:
+			return False
 		temp=[]
 		DataBoxPlot=[]
 		for column in NumericColumns:
 			DataColumn=Dataframe[column].tolist()
 			NumericDataColumn=[]
-			#for element in DataColumn:
-			#	tempData=float(element)
-			#	NumericDataColumn.append(tempData)
 			DataBoxPlot.append([DataColumn,column])
-		return DataBoxPlot
-		
-               
+		return DataBoxPlot              
      
                
     def can_view(self, data_dict):
-        return True
+		resource = data_dict['resource']
+		_format = resource.get('format', None)
+		if (resource.get('datastore_active') or resource.get('url') == '_datastore_only_resource'):
+			return True 
+		if _format:
+			return _format.lower() in ['csv', 'tsv', 'xls', 'xlsx']
+		else:
+			return False
         
     def view_template(self, context, data_dict):
 		#self.boxplot(context, data_dict)
 		return "rtpaexplorativestats-view.html"
         
     def setup_template_variables(self, context, data_dict):
-        Data=self.boxplot(context, data_dict)
-        return {'resource_json': json.dumps(Data)}
+		Data=self.boxplot(context, data_dict)
+		return {'resource_json': json.dumps(Data)}
+
