@@ -27,7 +27,7 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
                  'default_title': 'Stats',
                }
                
-    def boxplot(self, context, data_dict):
+    def ExplorativeStats(self, context, data_dict):
 		datasetId=(data_dict['resource']['id'])
 		(ckanprotocol,ckanip)=ckan.lib.helpers.get_site_protocol_and_host()
 		ckanurl=ckanprotocol+'://'+ckanip
@@ -46,6 +46,17 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 			return False
 		temp=[]
 		DataBoxPlot=[]
+		#NumericColumnsLis=
+		##ExplorativeStats table
+		
+		TableData=Dataframe[NumericColumns.tolist()].copy()
+		print(TableData.quantile([0.25,0.5,0.75]))
+		print(TableData.max())
+		print(TableData.min())
+		print(TableData.std())
+		print(TableData.mean())
+		print(TableData.count())
+		
 		for column in NumericColumns:
 			DataColumn=Dataframe[column].tolist()
 			NumericDataColumn=[]
@@ -55,6 +66,7 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
                
     def can_view(self, data_dict):
 		resource = data_dict['resource']
+		
 		_format = resource.get('format', None)
 		if (resource.get('datastore_active') or resource.get('url') == '_datastore_only_resource'):
 			return True 
@@ -64,10 +76,11 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 			return False
         
     def view_template(self, context, data_dict):
-		#self.boxplot(context, data_dict)
+		#self.ExplorativeStats(context, data_dict)
 		return "rtpaexplorativestats-view.html"
         
     def setup_template_variables(self, context, data_dict):
-		Data=self.boxplot(context, data_dict)
+		Data=self.ExplorativeStats(context, data_dict)
+		print (data_dict['resource'])
 		return {'resource_json': json.dumps(Data)}
 

@@ -2,7 +2,7 @@
 
 {% block page %}
 
-<script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
 
   <style>
             body {font-family: Verdana;}
@@ -21,6 +21,21 @@
             .c3-axis path {stroke: grey;}
             .c3-circle { opacity: 1 !important; }
   </style>
+  <table>
+  <tr>
+	  <td>Summary</th>
+	  <td>count</td>
+	  <td>std</td>
+	  <td>min</td>
+	  <td>max</td>
+	  <td>25%</td>
+	  <td>50%</td>
+	  <td>75%</td>
+	  <td>mean</td>
+
+  </tr>
+  </table>
+		
   <div id="Boxplot"
 	   data-module="rtpaexplorativestats_view"
 	   data-module-site_url="{{ h.dump_json(h.url('/', locale='default', qualified=true)) }}"

@@ -5,7 +5,6 @@ this.ckan.module('rtpaexplorativestats_view', function(jQuery, _) {
             this.el.ready(this._onReady);
 		},
 		_onReady: function() {
-			//console.log( "on ready!" );
 			var BoxPlotData=JSON.parse(this.options.resource);
 			console.log(BoxPlotData);
 			this.renderBoxPlot(BoxPlotData);
@@ -32,10 +31,10 @@ this.ckan.module('rtpaexplorativestats_view', function(jQuery, _) {
 					}
 				}
 				Plotly.newPlot('Boxplot', BoxPlotArray);
+
 			}
 			else
 			{
-				console.log("no data");
 				$('#Boxplot').text("Error! No numeric data found!");
 			}
 			
@@ -48,8 +47,3 @@ this.ckan.module('rtpaexplorativestats_view', function(jQuery, _) {
 	};
 });
 
-
-/*$( document ).ready(function() {
-    console.log( "ready!" );
-    $('#Boxplot').fadeOut();
-});*/
