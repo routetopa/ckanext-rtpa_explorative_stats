@@ -2,6 +2,8 @@
 
 {% block page %}
 
+<script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
   <style>
             body {font-family: Verdana;}
             .node {
@@ -19,11 +21,16 @@
             .c3-axis path {stroke: grey;}
             .c3-circle { opacity: 1 !important; }
   </style>
-  <div><p>TEST</p>
-       
+  <div id="Boxplot"
+	   data-module="rtpaexplorativestats_view"
+	   data-module-site_url="{{ h.dump_json(h.url('/', locale='default', qualified=true)) }}"
+       data-module-resource = "{{ h.dump_json(resource_json) }}";
+       >
+  
   </div>
 
 
+	{% resource 'rtpaexplorativestats/main' %}
 {% endblock %}
 
 {% block styles %}{% endblock %}

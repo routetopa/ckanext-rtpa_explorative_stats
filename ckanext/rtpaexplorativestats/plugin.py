@@ -3,6 +3,8 @@ import ckan.plugins.toolkit as toolkit
 from logging import getLogger
 from ckan.common import json
 import ckan as ckan
+import urllib2
+import pandas as pd
 
 
 class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
@@ -25,12 +27,40 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
                  'default_title': 'Stats',
                }
                
+    def boxplot(self, context, data_dict):
+		datasetId=(data_dict['resource']['id'])
+		(ckanprotocol,ckanip)=ckan.lib.helpers.get_site_protocol_and_host()
+		ckanurl=ckanprotocol+'://'+ckanip
+		datadownloadurl=ckanurl+'/api/3/action/datastore_search?resource_id='+datasetId
+		data=json.loads(urllib2.urlopen(datadownloadurl).read())
+		Dataframe=pd.read_json(json.dumps(data['result']['records']))
+		try:
+			del Dataframe['_id']
+			del Dataframe['Id']
+		except:
+			Done=True
+		NumericColumns=(Dataframe.select_dtypes(exclude=['object','datetime']).columns)
+		temp=[]
+		DataBoxPlot=[]
+		for column in NumericColumns:
+			DataColumn=Dataframe[column].tolist()
+			NumericDataColumn=[]
+			#for element in DataColumn:
+			#	tempData=float(element)
+			#	NumericDataColumn.append(tempData)
+			DataBoxPlot.append([DataColumn,column])
+		return DataBoxPlot
+		
+               
+     
+               
     def can_view(self, data_dict):
         return True
         
     def view_template(self, context, data_dict):
-        return "rtpaexplorativestats-view.html"
+		#self.boxplot(context, data_dict)
+		return "rtpaexplorativestats-view.html"
         
     def setup_template_variables(self, context, data_dict):
-        return {'resource_json': json.dumps(data_dict['resource']),
-        		'resource_view_json': json.dumps(data_dict['resource_view'])}
+        Data=self.boxplot(context, data_dict)
+        return {'resource_json': json.dumps(Data)}
