@@ -21,27 +21,43 @@
             .c3-axis path {stroke: grey;}
             .c3-circle { opacity: 1 !important; }
   </style>
-  {}
   
-  <div id="Summary">	  
-	  
-  </div>
-	 
   
-		
-  <div id="Boxplot"
+ 
+
+ </table>
+
+  <div
 	   data-module="rtpaexplorativestats_view"
 	   data-module-site_url="{{ h.dump_json(h.url('/', locale='default', qualified=true)) }}"
        data-module-resource = "{{ h.dump_json(resource_json) }}";
        >
+       <table id="Summary">
+		<thead> 
+			<tr>
+			{%for header in (resource_summaryheaders)%}
+				<th>{{header}}</th>
+			{%endfor%}
+		</thead>
+		<tbody>
+			{%for row in resource_summarydata%}
+				<tr>
+				{%for element in row%}
+					<td>{{element}}</td>	
+				{%endfor%}
+				</tr>
+			{%endfor%}
+		</tbody>
+		 </table>
+		 
+		 <div id="Boxplot">
+		 
+		 </div>
   
   </div>
   
   <div>
-	  {{resource_summary}}
-  {% for a in (resource_summary) %}
-  {{ a }}
-  {%endfor%}
+
   </div>
 
 

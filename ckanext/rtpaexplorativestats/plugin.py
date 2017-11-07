@@ -58,6 +58,9 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 		
 		TableData=Dataframe[NumericColumns.tolist()].copy()
 		SummaryDataColumns=["Summary"]+NumericColumns.tolist()
+		
+		#SummaryData.append(SummaryDataColumns)
+		
 		SummaryData.append(["25%"]+(TableData.quantile(0.25).tolist()))
 		SummaryData.append(["50%"]+TableData.quantile(0.5).tolist())
 		SummaryData.append(["75%"]+TableData.quantile(0.75).tolist())
@@ -67,16 +70,12 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 		SummaryData.append(["std"]+(TableData.std()).tolist())
 		SummaryData.append(["mean"]+(TableData.mean()).tolist())
 		SummaryData.append(["count"]+(TableData.count()).tolist())
+	
+		#print(SummaryDataframe.tolist())
 		
-		X=SummaryDataColumns+SummaryData
+		####Correlation Matrix
 		
-		SummaryData=X
-		
-		#SummaryDataframe=(pd.DataFrame(data=SummaryData,columns=SummaryDataColumns))
-		
-		
-		
-		return DataBoxPlot,SummaryData              
+		return DataBoxPlot,SummaryData,SummaryDataColumns           
      
                
     def can_view(self, data_dict):
@@ -95,8 +94,8 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 		return "rtpaexplorativestats-view.html"
         
     def setup_template_variables(self, context, data_dict):
-		(Data,Summary)=self.ExplorativeStats(context, data_dict)
-		DataJson=[(Data),Summary]
+		(Data,SummaryData,SummaryColumns)=self.ExplorativeStats(context, data_dict)
 		return {'resource_json': json.dumps(Data),
-				'resource_summary': json.dumps(Summary)}
+				'resource_summarydata': SummaryData,
+				'resource_summaryheaders':SummaryColumns}
 
