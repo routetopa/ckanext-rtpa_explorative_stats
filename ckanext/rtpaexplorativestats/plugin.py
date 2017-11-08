@@ -10,7 +10,11 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 import urlparse
-from ckan.common import config
+try:
+	from ckan.common import config
+except Exception as e:
+	from ckan.common import c
+#from pylons import config
 
 
 class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
@@ -34,9 +38,13 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
                }
                
     def ExplorativeStats(self, context, data_dict):
+		print(c.remote_addr)
 		datasetId=(data_dict['resource']['id'])
-		(ckanprotocol,ckanip)=self.get_site_protocol_and_host()
-		print (ckan.lib.helpers.get_site_protocol_and_host())
+		try:
+			(ckanprotocol,ckanip)=config.get_site_protocol_and_host()
+		except Exception as e:
+			ckanip=c.remote_addr
+			ckanprotocol='http'
 		ckanurl=ckanprotocol+'://'+ckanip
 		datadownloadurl=ckanurl+'/api/3/action/datastore_search?resource_id='+datasetId
 		data=json.loads(urllib2.urlopen(datadownloadurl).read())
@@ -71,16 +79,15 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 		(SummaryData,SummaryDataColumns)=self.SummaryDataTable(TableData,NumericColumns)
 		
 		return DataBoxPlot,SummaryData,SummaryDataColumns,Correlation
-		
-    def get_site_protocol_and_host(self):
-		site_url = config.get('ckan.site_url', None)
+		'''
+#    def get_site_protocol_and_host(self):		site_url = config.get('ckan.site_url', None)
 		if site_url is not None:
 			parsed_url = urlparse.urlparse(site_url)
 			return (
 			parsed_url.scheme.encode('utf-8'),
 			parsed_url.netloc.encode('utf-8')
 			)
-		return (None, None)
+		return (None, None)'''
 
     def SummaryDataTable(self, TableData, NumericColumns):
 		SummaryData=[]
