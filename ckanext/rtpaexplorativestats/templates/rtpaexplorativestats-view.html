@@ -51,7 +51,12 @@
 		 </table>
 		 
 		 <div id="Boxplot">
-		 
+		 </div>
+		 <div id="CorrelationMatrix">
+			 {% if result != None %}
+				<img src="data:image/png;base64,{{ resource_correlationmatrix }}"\>
+			 {% endif %}
+			 
 		 </div>
   
   </div>

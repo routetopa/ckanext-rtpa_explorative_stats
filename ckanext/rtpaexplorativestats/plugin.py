@@ -5,6 +5,11 @@ from ckan.common import json
 import ckan as ckan
 import urllib2
 import pandas as pd
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
+
 
 
 class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
@@ -51,14 +56,23 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 			DataColumn=Dataframe[column].tolist()
 			NumericDataColumn=[]
 			DataBoxPlot.append([DataColumn,column])
+
+		TableData=Dataframe[NumericColumns.tolist()].copy()
 		#NumericColumnsLis=
 		##ExplorativeStats table
+
+		#print(SummaryDataframe.tolist())
 		
+		####Correlation Matrix
+		Correlation=self.CorrelationMatrix(TableData)
+		###SummaryDataTable
+		(SummaryData,SummaryDataColumns)=self.SummaryDataTable(TableData,NumericColumns)
+		
+		return DataBoxPlot,SummaryData,SummaryDataColumns,Correlation
+
+    def SummaryDataTable(self, TableData, NumericColumns):
 		SummaryData=[]
-		
-		TableData=Dataframe[NumericColumns.tolist()].copy()
 		SummaryDataColumns=["Summary"]+NumericColumns.tolist()
-		
 		#SummaryData.append(SummaryDataColumns)
 		
 		SummaryData.append(["25%"]+(TableData.quantile(0.25).tolist()))
@@ -70,12 +84,25 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 		SummaryData.append(["std"]+(TableData.std()).tolist())
 		SummaryData.append(["mean"]+(TableData.mean()).tolist())
 		SummaryData.append(["count"]+(TableData.count()).tolist())
+			
+		return SummaryData,SummaryDataColumns
 	
-		#print(SummaryDataframe.tolist())
 		
-		####Correlation Matrix
+    def CorrelationMatrix(self, dataframe):
+		corr = dataframe.corr()
+		fig, ax = plt.subplots()
+		cax = ax.matshow(corr)
+		fig.colorbar(cax)
+		plt.xticks(range(len(corr.columns)), corr.columns);
+		plt.yticks(range(len(corr.columns)), corr.columns);
+		plt.xticks(rotation=90)
+		plt.tight_layout()
+		CorrelationFile=BytesIO()
+		plt.savefig(CorrelationFile, format='png')
+		CorrelationFile.seek(0) 
+		CorrelationPNG = base64.b64encode(CorrelationFile.getvalue())
+		return CorrelationPNG
 		
-		return DataBoxPlot,SummaryData,SummaryDataColumns           
      
                
     def can_view(self, data_dict):
@@ -94,8 +121,9 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 		return "rtpaexplorativestats-view.html"
         
     def setup_template_variables(self, context, data_dict):
-		(Data,SummaryData,SummaryColumns)=self.ExplorativeStats(context, data_dict)
+		(Data,SummaryData,SummaryColumns,Correlation)=self.ExplorativeStats(context, data_dict)
 		return {'resource_json': json.dumps(Data),
 				'resource_summarydata': SummaryData,
-				'resource_summaryheaders':SummaryColumns}
+				'resource_summaryheaders':SummaryColumns,
+				'resource_correlationmatrix' : Correlation}
 
