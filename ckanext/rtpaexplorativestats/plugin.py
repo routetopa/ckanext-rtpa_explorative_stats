@@ -10,10 +10,10 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 import urlparse
-try:
-	from ckan.common import config
-except Exception as e:
-	from ckan.common import c
+#try:
+#	from ckan.common import c,request
+#except Exception:
+#	pass
 #from pylons import config
 
 
@@ -38,13 +38,11 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
                }
                
     def ExplorativeStats(self, context, data_dict):
-		print(c.remote_addr)
 		datasetId=(data_dict['resource']['id'])
-		try:
-			(ckanprotocol,ckanip)=config.get_site_protocol_and_host()
-		except Exception as e:
-			ckanip=c.remote_addr
-			ckanprotocol='http'
+		#try:
+		(ckanprotocol,ckanip)=ckan.lib.helpers.get_site_protocol_and_host()
+		#except Exception as e:
+
 		ckanurl=ckanprotocol+'://'+ckanip
 		datadownloadurl=ckanurl+'/api/3/action/datastore_search?resource_id='+datasetId
 		data=json.loads(urllib2.urlopen(datadownloadurl).read())
@@ -80,7 +78,8 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 		
 		return DataBoxPlot,SummaryData,SummaryDataColumns,Correlation
 		'''
-#    def get_site_protocol_and_host(self):		site_url = config.get('ckan.site_url', None)
+#    def get_site_protocol_and_host(self):		
+		site_url = config.get('ckan.site_url', None)
 		if site_url is not None:
 			parsed_url = urlparse.urlparse(site_url)
 			return (
