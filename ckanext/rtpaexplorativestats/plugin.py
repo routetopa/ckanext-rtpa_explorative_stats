@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 import urlparse
+from pylons import config
 #try:
 #	from ckan.common import c,request
 #except Exception:
@@ -39,11 +40,8 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
                
     def ExplorativeStats(self, context, data_dict):
 		datasetId=(data_dict['resource']['id'])
-		#try:
-		(ckanprotocol,ckanip)=ckan.lib.helpers.get_site_protocol_and_host()
-		#except Exception as e:
-
-		ckanurl=ckanprotocol+'://'+ckanip
+		
+		ckanurl=config.get('ckan.site_url', '')
 		datadownloadurl=ckanurl+'/api/3/action/datastore_search?resource_id='+datasetId
 		data=json.loads(urllib2.urlopen(datadownloadurl).read())
 		Dataframe=pd.read_json(json.dumps(data['result']['records']))
