@@ -5,6 +5,8 @@ from ckan.common import json
 import ckan as ckan
 import urllib2
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import matplotlib.pyplot as plt
 from io import BytesIO
@@ -43,6 +45,7 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 		
 		ckanurl=config.get('ckan.site_url', '')
 		datadownloadurl=ckanurl+'/api/3/action/datastore_search?resource_id='+datasetId
+		print(datadownloadurl)
 		data=json.loads(urllib2.urlopen(datadownloadurl).read())
 		Dataframe=pd.read_json(json.dumps(data['result']['records']))
 		try:
