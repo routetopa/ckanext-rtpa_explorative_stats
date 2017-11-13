@@ -35,9 +35,9 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
     def info(self):
         return { 
                  'name': 'rtpaexplorativestats',
-                 'title': 'Stats',
-                 'icon': 'table',
-                 'default_title': 'Stats',
+                 'title': 'Exploratory Stats',
+                 'icon': 'lightbulb',
+                 'default_title': 'Exploratory Stats',
                }
                
     def ExplorativeStats(self, context, data_dict):
@@ -45,17 +45,20 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 		
 		ckanurl=config.get('ckan.site_url', '')
 		datadownloadurl=ckanurl+'/api/3/action/datastore_search?resource_id='+datasetId
-		print(datadownloadurl)
+
 		data=json.loads(urllib2.urlopen(datadownloadurl).read())
 		Dataframe=pd.read_json(json.dumps(data['result']['records']))
+
 		try:
 			del Dataframe['_id']
 			del Dataframe['Id']
 		except:
 			Done=True
+
 		NumericColumns=(Dataframe.select_dtypes(exclude=['object','datetime']).columns)
 		CheckNumericColumns=[]
 		CheckNumericColumns=(NumericColumns.tolist())
+
 		if not CheckNumericColumns:
 			return False
 		temp=[]
@@ -79,6 +82,7 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 		
 		return DataBoxPlot,SummaryData,SummaryDataColumns,Correlation
 		'''
+
 #    def get_site_protocol_and_host(self):		
 		site_url = config.get('ckan.site_url', None)
 		if site_url is not None:
@@ -105,8 +109,7 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 		SummaryData.append(["count"]+(TableData.count()).tolist())
 			
 		return SummaryData,SummaryDataColumns
-	
-		
+
     def CorrelationMatrix(self, dataframe):
 		corr = dataframe.corr()
 		fig, ax = plt.subplots()
@@ -121,9 +124,7 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 		CorrelationFile.seek(0) 
 		CorrelationPNG = base64.b64encode(CorrelationFile.getvalue())
 		return CorrelationPNG
-		
-     
-               
+
     def can_view(self, data_dict):
 		resource = data_dict['resource']
 		
@@ -134,15 +135,15 @@ class RtpaexplorativestatsPlugin(plugins.SingletonPlugin):
 			return _format.lower() in ['csv', 'tsv', 'xls', 'xlsx']
 		else:
 			return False
-        
+
     def view_template(self, context, data_dict):
 		#self.ExplorativeStats(context, data_dict)
 		return "rtpaexplorativestats-view.html"
-        
+
     def setup_template_variables(self, context, data_dict):
 		(Data,SummaryData,SummaryColumns,Correlation)=self.ExplorativeStats(context, data_dict)
 		return {'resource_json': json.dumps(Data),
 				'resource_summarydata': SummaryData,
 				'resource_summaryheaders':SummaryColumns,
-				'resource_correlationmatrix' : Correlation}
-
+				'resource_correlationmatrix' : Correlation
+		}
