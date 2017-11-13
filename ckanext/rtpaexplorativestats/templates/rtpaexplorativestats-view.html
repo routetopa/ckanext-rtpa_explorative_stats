@@ -2,71 +2,66 @@
 
 {% block page %}
 
+    <style>
+        body {
+          font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
+          font-size: 14px;
+          line-height: 20px;
+          color: #444444;
+        }
+        .node {
+          border: solid 1px white;
+          overflow: hidden;
+          position: absolute;
+          text-indent: 2px;
+        }
+        .c3-line, .c3-focused {stroke-width: 3px !important;}
+        .c3-bar {stroke: white !important; stroke-width: 1;}
+        .c3 text { font-size: 12px; color: grey;}
+        .tick line {stroke: white;}
+        .c3-axis path {stroke: grey;}
+        .c3-circle { opacity: 1 !important; }
+    </style>
 
-
-  <style>
-            body {font-family: Verdana;}
-            .node {
-              border: solid 1px white;
-              font: 10px sans-serif;
-              line-height: 12px;
-              overflow: hidden;
-              position: absolute;
-              text-indent: 2px;
-            }
-            .c3-line, .c3-focused {stroke-width: 3px !important;}
-            .c3-bar {stroke: white !important; stroke-width: 1;}
-            .c3 text { font-size: 12px; color: grey;}
-            .tick line {stroke: white;}
-            .c3-axis path {stroke: grey;}
-            .c3-circle { opacity: 1 !important; }
-  </style>
-  
-  
- 
-
- </table>
-
-  <div
-	   data-module="rtpaexplorativestats_view"
-	   data-module-site_url="{{ h.dump_json(h.url('/', locale='default', qualified=true)) }}"
-       data-module-resource = "{{ h.dump_json(resource_json) }}";
+	<div
+	    data-module="rtpaexplorativestats_view"
+	    data-module-site_url="{{ h.dump_json(h.url('/', locale='default', qualified=true)) }}"
+	    data-module-resource = "{{ h.dump_json(resource_json) }}";
        >
+
        <table id="Summary">
-		<thead> 
-			<tr>
-			{%for header in (resource_summaryheaders)%}
+		<thead>
+		    <tr>
+			{% for header in (resource_summaryheaders) %}
 				<th>{{header}}</th>
-			{%endfor%}
+			{% endfor %}
+		    </tr>
 		</thead>
 		<tbody>
-			{%for row in resource_summarydata%}
+			{% for row in resource_summarydata %}
 				<tr>
-				{%for element in row%}
-					<td>{{element}}</td>	
-				{%endfor%}
+				{% for element in row %}
+				    <td>{{element}}</td>
+				{% endfor %}
 				</tr>
-			{%endfor%}
+			{% endfor %}
 		</tbody>
-		 </table>
-		 
-		 <div id="Boxplot">
-		 </div>
-		 <div id="CorrelationMatrix">
-			 {% if result != None %}
-				<img src="data:image/png;base64,{{ resource_correlationmatrix }}"\>
-			 {% endif %}
-			 
-		 </div>
-  
-  </div>
-  
-  <div>
+	</table>
 
-  </div>
+	<div id="Boxplot">
 
+	</div>
 
-	{% resource 'rtpaexplorativestats/main' %}
+	<div id="CorrelationMatrix">
+		{% if result != None %}
+			<img src="data:image/png;base64,{{ resource_correlationmatrix }}"\>
+		{% endif %}
+	</div>
+
+    </div>
+
+    {% resource 'rtpaexplorativestats/main' %}
+
 {% endblock %}
 
 {% block styles %}{% endblock %}
