@@ -29,7 +29,8 @@
 	    data-module-resource = "{{ h.dump_json(resource_json) }}";
        >
 
-       <table id="Summary">
+	<h3>{% trans %}Data Summary{% endtrans %}</h3>
+	<table id="Summary">
 		<thead>
 		    <tr>
 			{% for header in (resource_summaryheaders) %}
@@ -48,9 +49,15 @@
 		</tbody>
 	</table>
 
+	<h3 style="margin-bottom: 0;">{% trans %}Box Plot{% endtrans %}</h3>
+	<a class="" href="https://en.wikipedia.org/wiki/Box_plot" target="_blank">{% trans %}How can I understand this?{% endtrans %}</a>
+
 	<div id="Boxplot">
 
 	</div>
+
+	<h3 style="margin-bottom: 0;">{% trans %}Correlation Matrix{% endtrans %}</h3>
+	<a class="" href="https://en.wikipedia.org/wiki/Correlation_and_dependence" target="_blank">{% trans %}How can I understand this?{% endtrans %}</a>
 
 	<div id="CorrelationMatrix">
 		{% if result != None %}
